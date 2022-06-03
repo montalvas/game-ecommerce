@@ -15,7 +15,16 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     score = models.PositiveIntegerField(null=True, default=0)
-    image = models.ImageField(upload_to='covers', null=True, default='covers/placeholder.png')
+    image = models.ImageField(upload_to='covers', null=True, blank=True)
+    
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        
+        return url
     
     def __str__(self):
         return self.name

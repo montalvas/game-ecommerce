@@ -3,17 +3,28 @@
 
 {% block content %}
 <div class="row">
+    {% for product in products %}
     <div class="col-lg-4">
+        {% if product.image == '' %}
         <img class="thumbnail" src="{% static 'images/placeholder.png' %}" alt="thumbnail">
+        {% else %}
+        <div class="text-center game-box">
+            <img src="{{ product.image.url }}" alt="thumbnail">
+        </div>
+        {% endif %}
         <div class="box-element product">
-            <h3><strong>Product</strong> <span class="badge bg-success">100</span></h3>
+            <h3 class="game-title">
+                <strong>{{ product.name }}</strong> <span class="badge bg-success">{{ product.score }}</span>
+            </h3>
             <hr>
             <button class="btn btn-outline-primary add-btn">Add to Cart</button>
-            <h3 style="display: inline-block; float: right;">R$ 100,00</h3>
+            <p class="product-price">R$ {{ product.price }}</p>
         </div>
     </div>
+    {% empty %}
+        <h3 class='mt-4 text-center'>Nenhum produto cadastrado</h3>
+    {% endfor %}
 
-    
 </div>
 
 {% endblock content %}
