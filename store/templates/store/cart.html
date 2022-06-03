@@ -9,8 +9,10 @@
 
             <table class="table mt-4">
                 <tr>
-                    <th><h5>Items: <strong>3</strong></h5></th>
-                    <th><h5>Total:<strong> $42</strong></h5></th>
+                    <th><h5>Items: <strong>{{ order.get_quantity }}</strong></h5></th>
+                    <th><h5>Frete: <strong>R$ {{ order.get_shipping }}</strong></h5></th>
+                    <th><h5>Subtotal: <strong>R$ {{ order.get_cart_subtotal }}</strong></h5></th>
+                    <th><h4>Total: <strong>R$ {{ order.get_cart_total }}</strong></h4></th>
                     <th>
                         <a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'store:checkout' %}">Checkout</a>
                     </th>
@@ -20,20 +22,28 @@
 
         <div class="box-element">
             <div class="cart-row">
-                <div style="flex:2"></div>
-                <div style="flex:2"><strong>Item</strong></div>
+                <div style="flex:1"></div>
+                <div style="flex:1"><strong>Item</strong></div>
                 <div style="flex:1"><strong>Price</strong></div>
                 <div style="flex:1"><strong></strong></div>
             </div>
             
+            {% for item in items %}
             <div class="cart-row">
-                <div style="flex:2"><img class="row-image" src="{% static 'images/placeholder.png' %}"></div>
-                <div style="flex:2"><p>Product 1</p></div>
-                <div style="flex:1"><p>R$ 20</p></div>
+                <div style="flex:1">
+                    <img class="row-image" src="{{ item.product.imageURL }}">
+                </div>
+                <div style="flex:2"><p>{{ item.product.name }}</p></div>
+                <div style="flex:1"><p>R$ {{ item.product.price }}</p></div>
                 <div style="flex:1">
                     <a class="btn btn-outline-danger btn-sm" href="#">Remove</a>
                 </div>
             </div>
+            {% empty %}
+            <div class="cart-row">
+                <p>Nenhum produto no carrinho.</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

@@ -49,13 +49,22 @@
                 <hr>
                 <h3>Order Summary</h3>
                 <hr>
+                {% for item in items %}
                 <div class="cart-row">
-                    <div style="flex:2"><img class="row-image" src="{% static 'images/placeholder.png' %}"></div>
-                    <div style="flex:2"><p>Product 1</p></div>
-                    <div style="flex:1"><p>$20.00</p></div>
+                    <div style="flex:2">
+                        <img class="row-image" src="{{ item.product.imageURL }}">
+                    </div>
+                    <div style="flex:2"><p>{{ item.name }}</p></div>
+                    <div style="flex:1"><p>$ {{ item.get_price }}</p></div>
                 </div>
-                <h5>Items:   2</h5>
-                <h5>Total:   $40</h5>
+                {% empty %}
+                    <p>Nenhum produto adicionado.</p>
+                {% endfor %}
+                <h5>Items:   {{ order.get_quantity }}</h5>
+                <h5>Frete:   {{ order.get_shipping }}</h5>
+                <h5>Subtotal:   R$ {{ order.get_cart_subtotal }}</h5>
+                <hr>
+                <h4>Total:   {{ order.get_cart_total }}</h4>
             </div>
 		</div>
 	</div>
