@@ -55,7 +55,7 @@
                         <img class="row-image" src="{{ item.product.imageURL }}">
                     </div>
                     <div style="flex:2"><p>{{ item.name }}</p></div>
-                    <div style="flex:1"><p>$ {{ item.get_price }}</p></div>
+                    <div style="flex:1"><p>R$ {{ item.get_price }}</p></div>
                 </div>
                 {% empty %}
                     <p>Nenhum produto adicionado.</p>
@@ -64,7 +64,7 @@
                 <h5>Frete:   {{ order.get_shipping }}</h5>
                 <h5>Subtotal:   R$ {{ order.get_cart_subtotal }}</h5>
                 <hr>
-                <h4>Total:   {{ order.get_cart_total }}</h4>
+                <h4>Total:   R$ {{ order.get_cart_total }}</h4>
             </div>
 		</div>
 	</div>
