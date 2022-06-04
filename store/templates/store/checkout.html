@@ -15,23 +15,6 @@
                     </div>
                 </div>
                 
-                <div id="shipping-info">
-                    <hr>
-                    <p>Shipping Information:</p>
-                    <hr>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="address" placeholder="Address..">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="city" placeholder="City..">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="state" placeholder="State..">
-                    </div>
-                    <div class="form-field">
-                        <input class="form-control" type="text" name="zipcode" placeholder="Zip code..">
-                    </div>
-                </div>
                 <hr>
                 <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
             </form>
@@ -39,6 +22,7 @@
 		
         <div class="box-element hidden" id="payment-info">
             <small>Paypal Options</small>
+            <button id="make-payment">Make Payment</button>
         </div>
 	</div>
 
@@ -51,10 +35,10 @@
                 <hr>
                 {% for item in items %}
                 <div class="cart-row">
-                    <div style="flex:2">
+                    <div style="flex:1">
                         <img class="row-image" src="{{ item.product.imageURL }}">
                     </div>
-                    <div style="flex:2"><p>{{ item.name }}</p></div>
+                    <div style="flex:2"><p>{{ item.product.name }}</p></div>
                     <div style="flex:1"><p>R$ {{ item.get_price }}</p></div>
                 </div>
                 {% empty %}
@@ -69,5 +53,62 @@
 		</div>
 	</div>
 </div>
+
+<script>
+    
+    var total = '{{ order.get_cart_total }}'
+
+    if (user != 'AnonymousUser') {
+        document.getElementById('form-wrapper').classList.add("hidden");
+        document.getElementById('payment-info').classList.remove("hidden");
+    }
+
+    var form = document.getElementById('form')
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault()
+        console.log('Form submited')
+        document.getElementById('form-button').classList.add('hidden')
+        document.getElementById('payment-info').classList.remove('hidden')
+    })
+
+    document.getElementById('make-payment').addEventListener('click', function(e) {
+        submitFormData()
+    })
+
+    function submitFormData() {
+        var userFormData = {
+            'name': null,
+            'email': null,
+            'total': total,
+        }
+
+        if (user == 'AnonymousUser') {
+            userFormData.name = form.name.value
+            userFormData.email = form.email.value
+        }
+
+        var url = '/process-order/'
+
+        fetch(url, {
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            }, 
+            body: JSON.stringify({'form': userFormData}),    
+        })
+
+        .then((response) => { response.json() })
+
+        .then((data) => {
+            console.log('Success:', data);
+            alert('Transaction completed');  
+
+            window.location.href = "{% url 'store:home' %}"
+
+            })
+    }
+</script>
 
 {% endblock content %}
